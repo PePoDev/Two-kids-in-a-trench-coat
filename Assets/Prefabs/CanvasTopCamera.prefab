@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2831332545551247175}
   - component: {fileID: 6542744317269517613}
   m_Layer: 5
-  m_Name: Image
+  m_Name: VignetteMask
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 10}
+  m_AnchoredPosition: {x: 0, y: 20}
   m_SizeDelta: {x: 0, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2831332545551247175
@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 5558073767130366288, guid: 648835f7fd840d64383cf91917bbfa0c, type: 3}
+  m_Sprite: {fileID: -5364925631861443758, guid: 6ae58e9f9daa3144c9c0bfbb967e45f9, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -87,6 +87,7 @@ GameObject:
   - component: {fileID: 8502519928571473682}
   - component: {fileID: 7376353626591088626}
   - component: {fileID: 4608340109726675514}
+  - component: {fileID: -2657411379258481008}
   m_Layer: 5
   m_Name: CanvasTopCamera
   m_TagString: Untagged
@@ -177,3 +178,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &-2657411379258481008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9088196562026000345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 686da301d23666b48a26c9f18a0c7995, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraBorder
+  borderColor: {r: 0.12156863, g: 0.43137255, b: 0.1764706, a: 1}
+  borderWidth: 10
+  canvasRect: {fileID: 1259382012002974664}
