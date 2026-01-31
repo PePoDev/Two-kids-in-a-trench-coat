@@ -143,7 +143,16 @@ public class CarController : MonoBehaviour
         // Instantiate the car model
         spawnedCarModel = Instantiate(selectedPrefab, parent);
         spawnedCarModel.transform.localPosition = Vector3.zero;
-        spawnedCarModel.transform.localRotation = Quaternion.identity;
+        
+        // Rotate 180 degrees if moving backward (z = -1)
+        if (moveDirection.z == -1f)
+        {
+            spawnedCarModel.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
+        }
+        else
+        {
+            spawnedCarModel.transform.localRotation = Quaternion.identity;
+        }
         
         // Randomize speed when spawning new car model
         if (fixedSpeed <= 0f)

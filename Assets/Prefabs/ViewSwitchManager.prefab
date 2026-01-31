@@ -52,5 +52,5 @@ MonoBehaviour:
   bottomFPPCamera: {fileID: 0}
   proximityThreshold: 3
   player1SwitchKey: 19
-  player2SwitchKey: 84
+  player2SwitchKey: 9
   showDebugInfo: 0
