@@ -280,10 +280,17 @@ public class StoryController : MonoBehaviour
         }
         else // MultipleSequential mode
         {
-            // Reveal the image at this index
+            // Reveal the image at this index with fade-in
             if (panelIndex < storyImages.Length && storyImages[panelIndex] != null)
             {
-                storyImages[panelIndex].gameObject.SetActive(true);
+                Image img = storyImages[panelIndex];
+                img.gameObject.SetActive(true);
+                
+                // Add fade-in effect if transition enabled
+                if (useFadeTransition)
+                {
+                    StartCoroutine(FadeInImage(img));
+                }
             }
         }
 
@@ -324,7 +331,32 @@ public class StoryController : MonoBehaviour
         canvasGroup.alpha = 1f;
         isTransitioning = false;
     }
-
+    
+    System.Collections.IEnumerator FadeInImage(Image image)
+    {
+        // Ensure image has a CanvasGroup for fading
+        CanvasGroup canvasGroup = image.GetComponent<CanvasGroup>();
+        if (canvasGroup == null)
+        {
+            canvasGroup = image.gameObject.AddComponent<CanvasGroup>();
+        }
+        
+        // Start from transparent
+        canvasGroup.alpha = 0f;
+        
+        // Fade in
+        float elapsed = 0f;
+        while (elapsed < fadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            canvasGroup.alpha = Mathf.Lerp(0f, 1f, elapsed / fadeDuration);
+            yield return null;
+        }
+        
+        // Ensure fully visible
+        canvasGroup.alpha = 1f;
+    }
+    
     void UpdateButtonStates()
     {
         int maxPanels = (revealMode == RevealMode.Single) ? storyPanels.Length : storyImages.Length;
