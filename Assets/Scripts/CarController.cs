@@ -32,8 +32,11 @@ public class CarController : MonoBehaviour
     [Tooltip("Parent transform for spawned car model (leave null to use this transform)")]
     public Transform carModelParent;
     
-    [Header("Destruction Settings")]
-    [Tooltip("Destroy car after looping this many times (0 = never destroy)")]
+    [Header("Respawn Settings")]
+    [Tooltip("Respawn new car model after looping (instead of destroying controller)")]
+    public bool respawnModelOnLoop = true;
+    
+    [Tooltip("Destroy entire controller after looping this many times (0 = never destroy)")]
     public int destroyAfterLoops = 0;
     
     private Vector3 startPosition;
@@ -102,10 +105,16 @@ public class CarController : MonoBehaviour
             distanceTraveled = 0f;
         }
         
+        // Respawn new car model if enabled
+        if (respawnModelOnLoop && carPrefabs != null && carPrefabs.Length > 0)
+        {
+            RespawnRandomCar();
+        }
+        
         // Check if should destroy after certain loops
         if (destroyAfterLoops > 0 && loopCount >= destroyAfterLoops)
         {
-            Debug.Log($"Car destroyed after {loopCount} loops");
+            Debug.Log($"Car controller destroyed after {loopCount} loops");
             Destroy(gameObject);
         }
     }
@@ -136,7 +145,16 @@ public class CarController : MonoBehaviour
         spawnedCarModel.transform.localPosition = Vector3.zero;
         spawnedCarModel.transform.localRotation = Quaternion.identity;
         
-        Debug.Log($"Spawned random car: {selectedPrefab.name}");
+        // Randomize speed when spawning new car model
+        if (fixedSpeed <= 0f)
+        {
+            currentSpeed = Random.Range(minSpeed, maxSpeed);
+            Debug.Log($"Spawned random car: {selectedPrefab.name} with new speed: {currentSpeed:F2}");
+        }
+        else
+        {
+            Debug.Log($"Spawned random car: {selectedPrefab.name}");
+        }
     }
     
     // Public method to change speed at runtime
