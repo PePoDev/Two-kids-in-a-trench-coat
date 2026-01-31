@@ -1,9 +1,8 @@
 using UnityEngine;
-using UnityEngine.Events;
 
 /// <summary>
-/// Detects when a car hits the player and triggers an event.
-/// Attach this script to the car GameObject.
+/// Detects when a car hits the player and triggers game over.
+/// This script is automatically added to cars when spawned.
 /// </summary>
 public class CarHit : MonoBehaviour
 {
@@ -14,26 +13,9 @@ public class CarHit : MonoBehaviour
     [Tooltip("Use trigger collider instead of collision")]
     public bool useTrigger = false;
     
-    [Header("Events")]
-    [Tooltip("Called when the car hits the player")]
-    public UnityEvent OnHitPlayer;
-    
-    [Tooltip("Called when the car hits the player, passes the player GameObject")]
-    public UnityEvent<GameObject> OnHitPlayerWithObject;
-    
     [Header("Debug")]
     [Tooltip("Show debug messages in console")]
     public bool showDebug = true;
-    
-    void Awake()
-    {
-        // Initialize events
-        if (OnHitPlayer == null)
-            OnHitPlayer = new UnityEvent();
-        
-        if (OnHitPlayerWithObject == null)
-            OnHitPlayerWithObject = new UnityEvent<GameObject>();
-    }
     
     void OnCollisionEnter(Collision collision)
     {
@@ -61,9 +43,15 @@ public class CarHit : MonoBehaviour
                 Debug.Log($"Car hit player: {hitObject.name}");
             }
             
-            // Trigger events
-            OnHitPlayer?.Invoke();
-            OnHitPlayerWithObject?.Invoke(hitObject);
+            // Call game over
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.GameOver();
+            }
+            else
+            {
+                Debug.LogWarning("GameManager not found! Cannot trigger game over.");
+            }
         }
     }
 }
