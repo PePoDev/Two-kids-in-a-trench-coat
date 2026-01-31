@@ -18,44 +18,44 @@ public class TopDownPlayer3D : MonoBehaviour
 
     [Header("Player Settings")]
     [SerializeField] private PlayerNumber playerNumber = PlayerNumber.Player1;
-    
+
     [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float sprintMultiplier = 1.5f;
     [SerializeField] private bool enableSprint = true;
-    
+
     [Header("Rotation Settings")]
     [SerializeField] private bool rotateTowardsMovement = true;
     [SerializeField] private float rotationSpeed = 720f; // degrees per second
     [SerializeField] private bool instantRotation = false;
-    
+
     [Header("Physics Settings")]
     [SerializeField] private bool useGravity = true;
     [SerializeField] private float gravityMultiplier = 2f;
     [SerializeField] private LayerMask groundLayer = ~0;
     [SerializeField] private float groundCheckDistance = 0.1f;
-    
+
     [Header("Visual (Optional)")]
     [SerializeField] private Renderer playerRenderer;
     [SerializeField] private Color player1Color = new Color(0.2f, 0.6f, 1f); // Blue
     [SerializeField] private Color player2Color = new Color(1f, 0.4f, 0.4f); // Red
-    
+
     [Header("Animation")]
     [SerializeField] private bool useAnimator = true;
     [SerializeField] private string walkBoolName = "Walk";
     [SerializeField] private string useItemTriggerName = "UseItem";
-    
+
     // Internal state
     private Vector3 moveInput;
     private Vector3 velocity;
     private bool isSprinting;
     private bool isGrounded;
-    
+
     // Components
     private Rigidbody rb;
     private CharacterController characterController;
     private Animator animator;
-    
+
     // Input keys based on player number (New Input System)
     private Key upKey;
     private Key downKey;
@@ -73,30 +73,30 @@ public class TopDownPlayer3D : MonoBehaviour
         // Get components
         rb = GetComponent<Rigidbody>();
         characterController = GetComponent<CharacterController>();
-        
+
         // Get animator from first child if using animations
         if (useAnimator && transform.childCount > 0)
         {
             animator = transform.GetChild(0).GetComponent<Animator>();
             if (animator != null)
             {
-                Debug.Log($"Animator found on first child: {transform.GetChild(0).name}");
+                // Debug.Log($"Animator found on first child: {transform.GetChild(0).name}");
             }
         }
-        
+
         // Configure Rigidbody for top-down movement
         if (rb != null)
         {
             rb.constraints = RigidbodyConstraints.FreezeRotation;
             rb.interpolation = RigidbodyInterpolation.Interpolate;
         }
-        
+
         // Find renderer if not assigned
         if (playerRenderer == null)
         {
             playerRenderer = GetComponentInChildren<Renderer>();
         }
-        
+
         // Apply player color
         ApplyPlayerColor();
     }
@@ -136,12 +136,12 @@ public class TopDownPlayer3D : MonoBehaviour
     void Update()
     {
         HandleInput();
-        
+
         if (rotateTowardsMovement)
         {
             HandleRotation();
         }
-        
+
         UpdateAnimator();
     }
 
@@ -156,10 +156,10 @@ public class TopDownPlayer3D : MonoBehaviour
         // Get keyboard reference
         Keyboard keyboard = Keyboard.current;
         if (keyboard == null) return;
-        
+
         // Reset input
         moveInput = Vector3.zero;
-        
+
         // Forward/Backward (Z-axis in world space for top-down)
         if (keyboard[upKey].isPressed)
         {
@@ -169,7 +169,7 @@ public class TopDownPlayer3D : MonoBehaviour
         {
             moveInput.z -= 1f;
         }
-        
+
         // Left/Right (X-axis)
         if (keyboard[leftKey].isPressed)
         {
@@ -179,13 +179,13 @@ public class TopDownPlayer3D : MonoBehaviour
         {
             moveInput.x += 1f;
         }
-        
+
         // Normalize for consistent diagonal movement
         if (moveInput.magnitude > 1f)
         {
             moveInput.Normalize();
         }
-        
+
         // Sprint
         isSprinting = enableSprint && keyboard[sprintKey].isPressed;
     }
@@ -199,7 +199,7 @@ public class TopDownPlayer3D : MonoBehaviour
         else
         {
             // Raycast ground check
-            isGrounded = Physics.Raycast(transform.position + Vector3.up * 0.1f, 
+            isGrounded = Physics.Raycast(transform.position + Vector3.up * 0.1f,
                 Vector3.down, groundCheckDistance + 0.1f, groundLayer);
         }
     }
@@ -208,7 +208,7 @@ public class TopDownPlayer3D : MonoBehaviour
     {
         float currentSpeed = moveSpeed * (isSprinting ? sprintMultiplier : 1f);
         Vector3 movement = moveInput * currentSpeed;
-        
+
         if (characterController != null)
         {
             // CharacterController movement
@@ -224,7 +224,7 @@ public class TopDownPlayer3D : MonoBehaviour
             {
                 velocity.y = 0f;
             }
-            
+
             Vector3 finalMovement = movement + new Vector3(0, velocity.y, 0);
             characterController.Move(finalMovement * Time.fixedDeltaTime);
         }
@@ -248,7 +248,7 @@ public class TopDownPlayer3D : MonoBehaviour
             // Calculate target rotation based on movement direction
             float targetAngle = Mathf.Atan2(moveInput.x, moveInput.z) * Mathf.Rad2Deg;
             Quaternion targetRotation = Quaternion.Euler(0f, targetAngle, 0f);
-            
+
             if (instantRotation)
             {
                 transform.rotation = targetRotation;
@@ -268,14 +268,14 @@ public class TopDownPlayer3D : MonoBehaviour
     private void UpdateAnimator()
     {
         if (!useAnimator || animator == null) return;
-        
+
         // Set Walk bool based on movement
         bool isWalking = moveInput.sqrMagnitude > 0.01f;
         animator.SetBool(walkBoolName, isWalking);
     }
 
     // ===== PUBLIC API =====
-    
+
     /// <summary>
     /// Trigger the UseItem animation
     /// </summary>
@@ -286,7 +286,7 @@ public class TopDownPlayer3D : MonoBehaviour
             animator.SetTrigger(useItemTriggerName);
         }
     }
-    
+
     /// <summary>
     /// Get the current player number
     /// </summary>
@@ -294,7 +294,7 @@ public class TopDownPlayer3D : MonoBehaviour
     {
         return playerNumber;
     }
-    
+
     /// <summary>
     /// Set the player number and reconfigure inputs
     /// </summary>
@@ -304,7 +304,7 @@ public class TopDownPlayer3D : MonoBehaviour
         SetupInputKeys();
         ApplyPlayerColor();
     }
-    
+
     /// <summary>
     /// Get current movement input (normalized)
     /// </summary>
@@ -312,7 +312,7 @@ public class TopDownPlayer3D : MonoBehaviour
     {
         return moveInput;
     }
-    
+
     /// <summary>
     /// Check if player is currently moving
     /// </summary>
@@ -320,7 +320,7 @@ public class TopDownPlayer3D : MonoBehaviour
     {
         return moveInput.sqrMagnitude > 0.01f;
     }
-    
+
     /// <summary>
     /// Check if player is sprinting
     /// </summary>
@@ -328,7 +328,7 @@ public class TopDownPlayer3D : MonoBehaviour
     {
         return isSprinting && IsMoving();
     }
-    
+
     /// <summary>
     /// Check if player is on the ground
     /// </summary>
@@ -336,7 +336,7 @@ public class TopDownPlayer3D : MonoBehaviour
     {
         return isGrounded;
     }
-    
+
     /// <summary>
     /// Set move speed at runtime
     /// </summary>
@@ -344,7 +344,7 @@ public class TopDownPlayer3D : MonoBehaviour
     {
         moveSpeed = Mathf.Max(0f, speed);
     }
-    
+
     /// <summary>
     /// Get current move speed
     /// </summary>
@@ -352,7 +352,7 @@ public class TopDownPlayer3D : MonoBehaviour
     {
         return moveSpeed;
     }
-    
+
     /// <summary>
     /// Get current actual speed (including sprint)
     /// </summary>
@@ -367,12 +367,12 @@ public class TopDownPlayer3D : MonoBehaviour
         // Update input keys when player number changes in editor
         SetupInputKeys();
     }
-    
+
     void OnDrawGizmosSelected()
     {
         // Draw ground check ray
         Gizmos.color = isGrounded ? Color.green : Color.red;
-        Gizmos.DrawLine(transform.position + Vector3.up * 0.1f, 
+        Gizmos.DrawLine(transform.position + Vector3.up * 0.1f,
             transform.position + Vector3.down * groundCheckDistance);
     }
 #endif

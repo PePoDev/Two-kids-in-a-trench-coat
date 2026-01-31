@@ -113,13 +113,35 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Lv3_End_1
+      name: ggj_2026_04_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 1024
-        height: 1536
+        x: 24
+        y: 1138
+        width: 495
+        height: 374
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c44c53bcd54bcfdb0800000000000000
+      internalID: -4756728791475829684
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lv3_End_0
+      rect:
+        serializedVersion: 2
+        x: 514
+        y: 1140
+        width: 486
+        height: 369
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +150,96 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2a70ea7eebfbf46bfacc7df43dac3e7a
-      internalID: -1432553460
+      spriteID: 0801d9b9eba0148ae9fae7c7cd2afa94
+      internalID: 535004804
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lv3_End_1
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 791
+        width: 467
+        height: 360
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7191d7021bde04cf7b72a19a8a1d93c2
+      internalID: -1227290487
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lv3_End_2
+      rect:
+        serializedVersion: 2
+        x: 492
+        y: 789
+        width: 532
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e1455c0693d8430e99f8b601ad88952
+      internalID: 1235694809
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lv3_End_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 517
+        width: 1024
+        height: 272
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: df8bda11917c8468a8333f017bbbaa83
+      internalID: 2026273269
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lv3_End_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1024
+        height: 506
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 899038bd433404bc0b2b4d2676c0c397
+      internalID: -726468389
       vertices: []
       indices: 
       edges: []
@@ -138,7 +248,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 3d7bc21fca5844098a6d462fba0089bf
+    spriteID: 45357a129508c4389885ba2d24a2b80f
     internalID: 0
     vertices: []
     indices: 
@@ -150,8 +260,13 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":1,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Lv3_End_0: -2066804448
-      Lv3_End_1: -1432553460
+      Lv3_End_0: 535004804
+      Lv3_End_1: -1227290487
+      Lv3_End_2: 1235694809
+      Lv3_End_3: 2026273269
+      Lv3_End_4: -726468389
+      Lv3_End_5: 1279603920
+      ggj_2026_04_0: -4756728791475829684
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

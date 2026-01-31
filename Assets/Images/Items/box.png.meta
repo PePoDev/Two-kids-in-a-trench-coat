@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 29e0ef38bacd645ed98fce2ed0e06236
+guid: 27e84a5135e994dcd9aca85df40f2eb5
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6335492500710045094
-    second: ggj_2026_02_0
+      213: 7499154508442906066
+    second: box_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,89 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Lv2_intro_0
+      name: box_0
       rect:
         serializedVersion: 2
-        x: 26
-        y: 697
-        width: 479
-        height: 300
+        x: 375
+        y: 139
+        width: 790
+        height: 799
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 67c1010d1ada94b328fd8a3675d7e227
-      internalID: -427899830
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Lv2_intro_1
-      rect:
-        serializedVersion: 2
-        x: 508
-        y: 696
-        width: 492
-        height: 301
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 059e185d50447400d9807d70ac35f42c
-      internalID: 1444947030
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Lv2_intro_2
-      rect:
-        serializedVersion: 2
-        x: 30
-        y: 390
-        width: 967
-        height: 293
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5d7434b5ba8f149989ec20db04d2788f
-      internalID: 1715594850
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Lv2_intro_3
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 1024
-        height: 384
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 2}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e46a044a14fca4981954f8866ad29cfc
-      internalID: -1762307788
+      spriteID: 2dd228f0b49521860800000000000000
+      internalID: 7499154508442906066
       vertices: []
       indices: 
       edges: []
@@ -204,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: e9b93e73f7d3c47eca2a42cc6ba470e7
+    spriteID: af08d9a8853bf4004b8cd671817f8a98
     internalID: 0
     vertices: []
     indices: 
@@ -212,15 +146,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries:
-      - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":1,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+      entries: []
     nameFileIdTable:
-      Lv2_intro_0: -427899830
-      Lv2_intro_1: 1444947030
-      Lv2_intro_2: 1715594850
-      Lv2_intro_3: -1762307788
-      Lv2_intro_4: -1834204920
+      box_0: 7499154508442906066
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

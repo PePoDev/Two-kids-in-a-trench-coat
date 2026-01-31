@@ -1,109 +1,194 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
+using TMPro;
 
 /// <summary>
 /// Handles player interaction input.
-/// Other scripts can subscribe to OnInteract event to implement interaction logic.
-/// 
-/// Player 1: E key
-/// Player 2: Numpad0 key
+/// Detects nearby InteractableObjects and allows player to interact with them.
+/// Shows tooltip when near an interactable object.
+/// Uses Space bar for interaction.
 /// </summary>
 public class PlayerInteraction : MonoBehaviour
 {
-    public enum PlayerNumber
-    {
-        Player1,  // E key
-        Player2   // Numpad0
-    }
-
-    [Header("Player Settings")]
-    [SerializeField] private PlayerNumber playerNumber = PlayerNumber.Player1;
+    [Header("Detection Settings")]
+    [Tooltip("Range to detect interactable objects")]
+    public float detectionRange = 2f;
     
-    [Header("Input Keys")]
-    [SerializeField] private Key player1InteractKey = Key.E;
-    [SerializeField] private Key player2InteractKey = Key.Numpad0;
+    [Tooltip("Layer mask for interactable objects")]
+    public LayerMask interactableLayer = ~0;
+    
+    [Tooltip("How often to check for interactables (seconds)")]
+    public float checkInterval = 0.1f;
+    
+    [Header("UI Settings")]
+    [Tooltip("Show on-screen tooltip prompt")]
+    public bool showTooltip = true;
+    
+    [Tooltip("TextMeshPro component for tooltip (optional, uses OnGUI if null)")]
+    public TextMeshProUGUI tooltipText;
+    
+    [Tooltip("Canvas Group for tooltip (for fade effects)")]
+    public CanvasGroup tooltipCanvasGroup;
+    
+    [Tooltip("Tooltip message")]
+    public string tooltipMessage = "Press Space to interact";
     
     [Header("Events")]
-    [Tooltip("Called when player presses interact key (single press, not holding for merge)")]
-    public UnityEvent OnInteract;
+    [Tooltip("Called when player interacts with any object")]
+    public UnityEvent<GameObject> OnInteract;
     
-    [Tooltip("Called when player starts holding interact key")]
-    public UnityEvent OnInteractHoldStart;
-    
-    [Tooltip("Called when player releases interact key")]
-    public UnityEvent OnInteractHoldEnd;
-    
-    // State
-    private Key myInteractKey;
-    private bool isHolding = false;
-    private float holdStartTime = 0f;
-    private const float HOLD_THRESHOLD = 0.3f; // seconds before considered "holding"
+    // Internal state
+    private InteractableObject currentInteractable;
+    private float checkTimer = 0f;
+    private Key interactKey = Key.Space;
     
     void Start()
     {
-        SetupKey();
+        // Initialize events
+        if (OnInteract == null)
+            OnInteract = new UnityEvent<GameObject>();
+        
+        // Hide tooltip initially
+        if (tooltipText != null)
+            tooltipText.gameObject.SetActive(false);
+        
+        if (tooltipCanvasGroup != null)
+            tooltipCanvasGroup.alpha = 0f;
     }
-
-    void OnValidate()
-    {
-        SetupKey();
-    }
-
-    private void SetupKey()
-    {
-        myInteractKey = playerNumber == PlayerNumber.Player1 ? player1InteractKey : player2InteractKey;
-    }
-
+    
     void Update()
     {
-        // Skip if in first-person mode (merge system handles this)
-        if (ViewSwitchManager.Instance != null && ViewSwitchManager.Instance.IsFirstPersonMode)
+        // Periodically check for nearby interactables
+        checkTimer += Time.deltaTime;
+        if (checkTimer >= checkInterval)
         {
-            return;
+            checkTimer = 0f;
+            DetectInteractables();
         }
         
-        HandleInput();
-    }
-
-    private void HandleInput()
-    {
-        Keyboard keyboard = Keyboard.current;
-        if (keyboard == null) return;
+        // Update tooltip display
+        UpdateTooltip();
         
-        if (keyboard[myInteractKey].wasPressedThisFrame)
+        // Handle interaction input
+        var keyboard = Keyboard.current;
+        if (keyboard != null && keyboard[interactKey].wasPressedThisFrame)
         {
-            holdStartTime = Time.time;
-            isHolding = true;
-            OnInteractHoldStart?.Invoke();
-        }
-        
-        if (keyboard[myInteractKey].wasReleasedThisFrame)
-        {
-            float holdDuration = Time.time - holdStartTime;
-            
-            // Only trigger interact if it was a quick press (not holding for merge)
-            if (holdDuration < HOLD_THRESHOLD)
-            {
-                OnInteract?.Invoke();
-            }
-            
-            isHolding = false;
-            OnInteractHoldEnd?.Invoke();
+            TryInteract();
         }
     }
-
-    // ===== PUBLIC API =====
     
-    public bool IsHolding => isHolding;
-    public float HoldDuration => isHolding ? Time.time - holdStartTime : 0f;
-    public PlayerNumber GetPlayerNumber() => playerNumber;
+    void DetectInteractables()
+    {
+        // Find all colliders in range
+        Collider[] colliders = Physics.OverlapSphere(transform.position, detectionRange, interactableLayer);
+        
+        // Find the closest interactable
+        InteractableObject closestInteractable = null;
+        float closestDistance = float.MaxValue;
+        
+        foreach (Collider col in colliders)
+        {
+            InteractableObject interactable = col.GetComponent<InteractableObject>();
+            if (interactable != null && interactable.CanInteract())
+            {
+                float distance = Vector3.Distance(transform.position, col.transform.position);
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestInteractable = interactable;
+                }
+            }
+        }
+        
+        currentInteractable = closestInteractable;
+    }
+    
+    void UpdateTooltip()
+    {
+        if (!showTooltip)
+            return;
+        
+        bool shouldShow = currentInteractable != null;
+        
+        // Update TextMeshPro tooltip
+        if (tooltipText != null)
+        {
+            tooltipText.gameObject.SetActive(shouldShow);
+            if (shouldShow)
+            {
+                tooltipText.text = tooltipMessage;
+            }
+        }
+        
+        // Update canvas group alpha
+        if (tooltipCanvasGroup != null)
+        {
+            float targetAlpha = shouldShow ? 1f : 0f;
+            tooltipCanvasGroup.alpha = Mathf.Lerp(tooltipCanvasGroup.alpha, targetAlpha, Time.deltaTime * 10f);
+        }
+    }
+    
+    void TryInteract()
+    {
+        if (currentInteractable != null)
+        {
+            // Interact with the object
+            currentInteractable.Interact(gameObject);
+            
+            // Invoke event
+            OnInteract?.Invoke(currentInteractable.gameObject);
+        }
+    }
     
     /// <summary>
-    /// Manually trigger interact (for testing or other scripts)
+    /// Check if player is currently near an interactable
     /// </summary>
-    public void TriggerInteract()
+    public bool IsNearInteractable()
     {
-        OnInteract?.Invoke();
+        return currentInteractable != null;
     }
+    
+    /// <summary>
+    /// Get the current interactable object
+    /// </summary>
+    public InteractableObject GetCurrentInteractable()
+    {
+        return currentInteractable;
+    }
+    
+    // Fallback OnGUI tooltip if no TextMeshPro is assigned
+    void OnGUI()
+    {
+        if (showTooltip && tooltipText == null && currentInteractable != null)
+        {
+            // Simple GUI text at the bottom center of the screen
+            GUIStyle style = new GUIStyle();
+            style.fontSize = 20;
+            style.normal.textColor = Color.white;
+            style.alignment = TextAnchor.MiddleCenter;
+            
+            GUI.Label(
+                new Rect(0, Screen.height - 100, Screen.width, 50),
+                tooltipMessage,
+                style
+            );
+        }
+    }
+    
+#if UNITY_EDITOR
+    void OnDrawGizmosSelected()
+    {
+        // Draw detection range
+        Gizmos.color = currentInteractable != null ? Color.green : Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, detectionRange);
+        
+        // Draw line to current interactable
+        if (currentInteractable != null)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(transform.position, currentInteractable.transform.position);
+        }
+    }
+#endif
 }

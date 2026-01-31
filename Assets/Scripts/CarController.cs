@@ -69,7 +69,7 @@ public class CarController : MonoBehaviour
             SpawnRandomCar();
         }
 
-        Debug.Log($"Car initialized with speed: {currentSpeed:F2}");
+        // Debug.Log($"Car initialized with speed: {currentSpeed:F2}");
     }
 
     void Update()

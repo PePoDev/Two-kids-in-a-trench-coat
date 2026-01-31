@@ -28,13 +28,6 @@ public class CatController : MonoBehaviour
     [Tooltip("Layer mask for obstacles to avoid")]
     public LayerMask obstacleLayer;
     
-    [Header("Capture Settings")]
-    [Tooltip("Tag for the capture box/area")]
-    public string boxTag = "CaptureBox";
-    
-    [Tooltip("Event called when cat is caught")]
-    public UnityEngine.Events.UnityEvent onCatCaught;
-    
     [Header("Visual Debugging")]
     [Tooltip("Show detection and flee range in Scene view")]
     public bool showDebugGizmos = true;
@@ -45,16 +38,12 @@ public class CatController : MonoBehaviour
     [Tooltip("Color when fleeing")]
     public Color gizmoColorFleeing = new Color(1f, 0f, 0f, 0.5f);
     
-    [Tooltip("Color when caught")]
-    public Color gizmoColorCaught = new Color(0f, 1f, 0f, 0.7f);
-    
     // Cat states
     private enum CatState
     {
         Idle,       // Waiting, looking for players
         Fleeing,    // Running away from player
-        Cooldown,   // Pausing after fleeing
-        Caught      // Inside the box, caught!
+        Cooldown    // Pausing after fleeing
     }
     
     private CatState currentState = CatState.Idle;
@@ -63,7 +52,6 @@ public class CatController : MonoBehaviour
     private float checkTimer = 0f;
     private float checkInterval = 0.2f;
     private Vector3 fleeTarget;
-    private bool isCaught = false;
     
     void Start()
     {
@@ -72,12 +60,6 @@ public class CatController : MonoBehaviour
     
     void Update()
     {
-        if (isCaught)
-        {
-            // Cat is caught, no more updates needed
-            return;
-        }
-        
         switch (currentState)
         {
             case CatState.Idle:
@@ -232,45 +214,15 @@ public class CatController : MonoBehaviour
         }
     }
     
-    void OnTriggerEnter(Collider other)
-    {
-        // Check if cat entered the capture box
-        if (other.CompareTag(boxTag) && !isCaught)
-        {
-            CatchCat();
-        }
-    }
-    
-    void CatchCat()
-    {
-        isCaught = true;
-        currentState = CatState.Caught;
-        
-        Debug.Log("Cat has been caught in the box!");
-        
-        // Invoke the caught event
-        if (onCatCaught != null)
-        {
-            onCatCaught.Invoke();
-        }
-    }
-    
     // Public method to reset the cat (if needed for replay)
     public void ResetCat(Vector3 newPosition)
     {
         transform.position = newPosition;
-        isCaught = false;
         currentState = CatState.Idle;
         nearestPlayer = null;
         cooldownTimer = 0f;
         checkTimer = 0f;
         Debug.Log("Cat has been reset!");
-    }
-    
-    // Public method to check if caught
-    public bool IsCaught()
-    {
-        return isCaught;
     }
     
     void OnDrawGizmos()
@@ -282,11 +234,7 @@ public class CatController : MonoBehaviour
         
         // Choose color based on state
         Color gizmoColor = gizmoColorDetection;
-        if (isCaught)
-        {
-            gizmoColor = gizmoColorCaught;
-        }
-        else if (currentState == CatState.Fleeing)
+        if (currentState == CatState.Fleeing)
         {
             gizmoColor = gizmoColorFleeing;
         }
@@ -317,9 +265,6 @@ public class CatController : MonoBehaviour
                 case CatState.Cooldown:
                     Gizmos.color = Color.blue;
                     break;
-                case CatState.Caught:
-                    Gizmos.color = Color.green;
-                    break;
             }
             Gizmos.DrawSphere(position + Vector3.up * 2f, 0.25f);
         }
@@ -333,11 +278,7 @@ public class CatController : MonoBehaviour
         // Display state information in Scene view
         #if UNITY_EDITOR
         string stateInfo = $"State: {currentState}";
-        if (isCaught)
-        {
-            stateInfo += " (CAUGHT!)";
-        }
-        else if (currentState == CatState.Cooldown)
+        if (currentState == CatState.Cooldown)
         {
             stateInfo += $" ({cooldownTimer:F1}s / {fleeCooldown:F1}s)";
         }

@@ -35,6 +35,7 @@ public class BoxController : MonoBehaviour
     
     private AudioSource audioSource;
     private Collider boxCollider;
+    private GameObject capturedObject;
     
     void Start()
     {
@@ -72,6 +73,8 @@ public class BoxController : MonoBehaviour
         {
             if (!isClosed)
             {
+                // Store the captured object
+                capturedObject = other.gameObject;
                 CloseBox();
                 Debug.Log($"Box closed by {other.name}");
             }
@@ -102,6 +105,14 @@ public class BoxController : MonoBehaviour
         if (audioSource != null && closeSound != null)
         {
             audioSource.PlayOneShot(closeSound);
+        }
+        
+        // Destroy the captured object
+        if (capturedObject != null)
+        {
+            Destroy(capturedObject);
+            Debug.Log($"Destroyed {capturedObject.name}");
+            capturedObject = null;
         }
     }
     

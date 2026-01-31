@@ -2,33 +2,34 @@ using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
-/// Example implementation of an interactable object.
-/// Attach this to any GameObject you want the player to interact with.
+/// Interactable object that can be triggered by the player.
+/// Attach this to any object you want the player to interact with.
+/// Configure the OnInteract event in the Inspector to define what happens.
 /// </summary>
-public class InteractableObject : MonoBehaviour, IInteractable
+public class InteractableObject : MonoBehaviour
 {
     [Header("Interaction Settings")]
-    [SerializeField] private string objectName = "Object";
-    [SerializeField] private bool canInteractMultipleTimes = true;
-    [SerializeField] private float cooldownTime = 0f;
+    [Tooltip("Name of this interactable object")]
+    public string objectName = "Interactable";
     
-    [Header("Visual Feedback")]
-    [SerializeField] private Material highlightMaterial;
-    [SerializeField] private Color highlightColor = Color.yellow;
-    [SerializeField] private bool enableHighlight = true;
+    [Tooltip("Can this object be interacted with multiple times?")]
+    public bool canInteractMultipleTimes = true;
     
-    [Header("Custom Events")]
+    [Tooltip("Cooldown between interactions (seconds)")]
+    public float interactionCooldown = 0f;
+    
+    [Header("Events")]
+    [Tooltip("Called when player interacts with this object")]
     public UnityEvent OnInteract;
+    
+    [Tooltip("Called when player interacts, passes the player GameObject")]
     public UnityEvent<GameObject> OnInteractWithPlayer;
     
     // Internal state
     private bool hasInteracted = false;
     private float lastInteractionTime = -Mathf.Infinity;
-    private Renderer objectRenderer;
-    private Material originalMaterial;
-    private Color originalColor;
     
-    void Start()
+    void Awake()
     {
         // Initialize events
         if (OnInteract == null)
@@ -36,17 +37,12 @@ public class InteractableObject : MonoBehaviour, IInteractable
         
         if (OnInteractWithPlayer == null)
             OnInteractWithPlayer = new UnityEvent<GameObject>();
-        
-        // Get renderer for visual feedback
-        objectRenderer = GetComponent<Renderer>();
-        if (objectRenderer != null)
-        {
-            originalMaterial = objectRenderer.material;
-            originalColor = objectRenderer.material.color;
-        }
     }
     
-    public void Interact(GameObject interactor)
+    /// <summary>
+    /// Called by PlayerInteraction when player presses interact key
+    /// </summary>
+    public void Interact(GameObject player)
     {
         // Check if we can interact
         if (!CanInteract())
@@ -59,24 +55,25 @@ public class InteractableObject : MonoBehaviour, IInteractable
         hasInteracted = true;
         lastInteractionTime = Time.time;
         
-        // Perform interaction
-        PerformInteraction(interactor);
-        
-        // Invoke Unity events
+        // Invoke events
+        Debug.Log($"{player.name} interacted with {objectName}");
         OnInteract?.Invoke();
-        OnInteractWithPlayer?.Invoke(interactor);
+        OnInteractWithPlayer?.Invoke(player);
     }
     
-    private bool CanInteract()
+    /// <summary>
+    /// Check if this object can be interacted with
+    /// </summary>
+    public bool CanInteract()
     {
-        // Check if we've already interacted and if multiple interactions are allowed
+        // Check if already interacted and multiple interactions not allowed
         if (hasInteracted && !canInteractMultipleTimes)
         {
             return false;
         }
         
         // Check cooldown
-        if (Time.time - lastInteractionTime < cooldownTime)
+        if (Time.time - lastInteractionTime < interactionCooldown)
         {
             return false;
         }
@@ -84,54 +81,20 @@ public class InteractableObject : MonoBehaviour, IInteractable
         return true;
     }
     
-    private void PerformInteraction(GameObject interactor)
-    {
-        // This is where you put your custom interaction logic
-        Debug.Log($"{interactor.name} interacted with {objectName}!");
-        
-        // Example: Change color on interaction
-        if (enableHighlight && objectRenderer != null)
-        {
-            StartCoroutine(HighlightEffect());
-        }
-    }
-    
-    private System.Collections.IEnumerator HighlightEffect()
-    {
-        // Apply highlight
-        if (highlightMaterial != null)
-        {
-            objectRenderer.material = highlightMaterial;
-        }
-        else
-        {
-            objectRenderer.material.color = highlightColor;
-        }
-        
-        // Wait
-        yield return new WaitForSeconds(0.3f);
-        
-        // Restore original
-        if (highlightMaterial != null)
-        {
-            objectRenderer.material = originalMaterial;
-        }
-        else
-        {
-            objectRenderer.material.color = originalColor;
-        }
-    }
-    
-    // Optional: Reset the interaction state
+    /// <summary>
+    /// Reset the interaction state
+    /// </summary>
     public void ResetInteraction()
     {
         hasInteracted = false;
         lastInteractionTime = -Mathf.Infinity;
     }
     
-    // Optional: Enable/disable interaction
-    public void SetInteractionEnabled(bool enabled)
+    /// <summary>
+    /// Get the name of this interactable
+    /// </summary>
+    public string GetName()
     {
-        this.enabled = enabled;
+        return objectName;
     }
 }
