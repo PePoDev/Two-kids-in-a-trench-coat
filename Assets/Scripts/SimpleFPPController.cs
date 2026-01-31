@@ -26,8 +26,9 @@ public class SimpleFPPController : MonoBehaviour
     [SerializeField] private Camera bottomCamera; // Bottom split - controls movement direction (Arrow)
     [SerializeField] private Transform cameraMount; // Where cameras are positioned (head level)
     
-    [Header("Camera Offset")]
-    [SerializeField] private Vector3 cameraOffset = new Vector3(0f, 1.6f, 0f);
+    [Header("Camera Offsets")]
+    [SerializeField] private Vector3 topCameraOffset = new Vector3(0f, 1.6f, 0f);
+    [SerializeField] private Vector3 bottomCameraOffset = new Vector3(0f, 1.6f, 0f);
     
     // Components
     private CharacterController controller;
@@ -138,25 +139,28 @@ public class SimpleFPPController : MonoBehaviour
 
     private void UpdateCameras()
     {
-        Vector3 cameraPosition = transform.position + cameraOffset;
+        // Calculate separate positions for top and bottom cameras
+        Vector3 topCamPosition = transform.position + topCameraOffset;
+        Vector3 bottomCamPosition = transform.position + bottomCameraOffset;
         
-        // Use cameraMount if assigned, otherwise use offset
+        // Use cameraMount if assigned (overrides offsets)
         if (cameraMount != null)
         {
-            cameraPosition = cameraMount.position;
+            topCamPosition = cameraMount.position;
+            bottomCamPosition = cameraMount.position;
         }
         
         // Update top camera
         if (topCamera != null)
         {
-            topCamera.transform.position = cameraPosition;
+            topCamera.transform.position = topCamPosition;
             topCamera.transform.rotation = Quaternion.Euler(0f, topCameraYRotation, 0f);
         }
         
         // Update bottom camera
         if (bottomCamera != null)
         {
-            bottomCamera.transform.position = cameraPosition;
+            bottomCamera.transform.position = bottomCamPosition;
             bottomCamera.transform.rotation = Quaternion.Euler(0f, bottomCameraYRotation, 0f);
         }
     }
@@ -188,14 +192,19 @@ public class SimpleFPPController : MonoBehaviour
 #if UNITY_EDITOR
     void OnDrawGizmosSelected()
     {
-        // Draw camera position
-        Vector3 camPos = transform.position + cameraOffset;
+        // Draw top camera position
+        Vector3 topCamPos = transform.position + topCameraOffset;
         Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(camPos, 0.2f);
+        Gizmos.DrawWireSphere(topCamPos, 0.2f);
+        
+        // Draw bottom camera position
+        Vector3 bottomCamPos = transform.position + bottomCameraOffset;
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(bottomCamPos, 0.2f);
         
         // Draw forward direction
         Gizmos.color = Color.blue;
-        Gizmos.DrawRay(camPos, transform.forward * 2f);
+        Gizmos.DrawRay(transform.position + topCameraOffset, transform.forward * 2f);
     }
 #endif
 }
