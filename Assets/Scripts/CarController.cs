@@ -153,7 +153,13 @@ public class CarController : MonoBehaviour
         {
             spawnedCarModel.transform.localRotation = Quaternion.identity;
         }
-
+        
+        // Add CarHit script if not already present
+        if (spawnedCarModel.GetComponent<CarHit>() == null)
+        {
+            spawnedCarModel.AddComponent<CarHit>();
+        }
+        
         // Randomize speed when spawning new car model
         if (fixedSpeed <= 0f)
         {
