@@ -169,7 +169,10 @@ public class CatController : MonoBehaviour
             }
         }
         
+        // Store current Y and set flee target on same Y level
+        float currentY = transform.position.y;
         fleeTarget = transform.position + directionAwayFromPlayer * fleeDistance;
+        fleeTarget = new Vector3(fleeTarget.x, currentY, fleeTarget.z);
         currentState = CatState.Fleeing;
         
         Debug.Log("Cat is fleeing from player!");
@@ -177,19 +180,36 @@ public class CatController : MonoBehaviour
     
     void UpdateFleeing()
     {
-        // Move towards flee target
-        float distance = Vector3.Distance(transform.position, fleeTarget);
+        // Move towards flee target (only calculate XZ distance)
+        Vector3 currentPosFlat = new Vector3(transform.position.x, 0f, transform.position.z);
+        Vector3 fleeTargetFlat = new Vector3(fleeTarget.x, 0f, fleeTarget.z);
+        float distance = Vector3.Distance(currentPosFlat, fleeTargetFlat);
         
         if (distance > 0.1f)
         {
-            Vector3 direction = (fleeTarget - transform.position).normalized;
+            Vector3 direction = (fleeTarget - transform.position);
+            direction.y = 0f; // Flatten direction for horizontal movement only
+            direction.Normalize();
+            
+            // Store current Y position
+            float currentY = transform.position.y;
+            
+            // Move the cat
             transform.position += direction * fleeSpeed * Time.deltaTime;
             
-            // Rotate to face movement direction
+            // Lock Y position to prevent sinking/floating
+            transform.position = new Vector3(transform.position.x, currentY, transform.position.z);
+            
+            // Rotate to face movement direction (Y-axis only)
             if (direction != Vector3.zero)
             {
-                Quaternion lookRotation = Quaternion.LookRotation(direction);
-                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 10f);
+                // Flatten direction to XZ plane for Y-axis only rotation
+                Vector3 flatDirection = new Vector3(direction.x, 0f, direction.z).normalized;
+                if (flatDirection != Vector3.zero)
+                {
+                    Quaternion lookRotation = Quaternion.LookRotation(flatDirection);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 10f);
+                }
             }
         }
         else
