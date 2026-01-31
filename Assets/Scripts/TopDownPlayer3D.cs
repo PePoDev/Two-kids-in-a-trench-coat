@@ -40,6 +40,11 @@ public class TopDownPlayer3D : MonoBehaviour
     [SerializeField] private Color player1Color = new Color(0.2f, 0.6f, 1f); // Blue
     [SerializeField] private Color player2Color = new Color(1f, 0.4f, 0.4f); // Red
     
+    [Header("Animation")]
+    [SerializeField] private bool useAnimator = true;
+    [SerializeField] private string walkBoolName = "Walk";
+    [SerializeField] private string useItemTriggerName = "UseItem";
+    
     // Internal state
     private Vector3 moveInput;
     private Vector3 velocity;
@@ -49,6 +54,7 @@ public class TopDownPlayer3D : MonoBehaviour
     // Components
     private Rigidbody rb;
     private CharacterController characterController;
+    private Animator animator;
     
     // Input keys based on player number (New Input System)
     private Key upKey;
@@ -67,6 +73,16 @@ public class TopDownPlayer3D : MonoBehaviour
         // Get components
         rb = GetComponent<Rigidbody>();
         characterController = GetComponent<CharacterController>();
+        
+        // Get animator from first child if using animations
+        if (useAnimator && transform.childCount > 0)
+        {
+            animator = transform.GetChild(0).GetComponent<Animator>();
+            if (animator != null)
+            {
+                Debug.Log($"Animator found on first child: {transform.GetChild(0).name}");
+            }
+        }
         
         // Configure Rigidbody for top-down movement
         if (rb != null)
@@ -125,6 +141,8 @@ public class TopDownPlayer3D : MonoBehaviour
         {
             HandleRotation();
         }
+        
+        UpdateAnimator();
     }
 
     void FixedUpdate()
@@ -239,15 +257,35 @@ public class TopDownPlayer3D : MonoBehaviour
             {
                 // Smooth rotation
                 transform.rotation = Quaternion.RotateTowards(
-                    transform.rotation, 
-                    targetRotation, 
+                    transform.rotation,
+                    targetRotation,
                     rotationSpeed * Time.deltaTime
                 );
             }
         }
     }
 
+    private void UpdateAnimator()
+    {
+        if (!useAnimator || animator == null) return;
+        
+        // Set Walk bool based on movement
+        bool isWalking = moveInput.sqrMagnitude > 0.01f;
+        animator.SetBool(walkBoolName, isWalking);
+    }
+
     // ===== PUBLIC API =====
+    
+    /// <summary>
+    /// Trigger the UseItem animation
+    /// </summary>
+    public void UseItem()
+    {
+        if (useAnimator && animator != null)
+        {
+            animator.SetTrigger(useItemTriggerName);
+        }
+    }
     
     /// <summary>
     /// Get the current player number

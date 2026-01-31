@@ -1818,7 +1818,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Floor_Park_01 (2)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6418736011511399556, guid: dd2c059c876fdcb468bd9d89e536ef40, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
