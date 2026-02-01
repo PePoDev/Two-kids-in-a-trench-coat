@@ -49,11 +49,6 @@ public class TopDownPlayer3D : MonoBehaviour
     [SerializeField] private LayerMask groundLayer = ~0;
     [SerializeField] private float groundCheckDistance = 0.1f;
 
-    [Header("Visual (Optional)")]
-    [SerializeField] private Renderer playerRenderer;
-    [SerializeField] private Color player1Color = new Color(0.2f, 0.6f, 1f); // Blue
-    [SerializeField] private Color player2Color = new Color(1f, 0.4f, 0.4f); // Red
-
     [Header("Animation")]
     [SerializeField] private bool useAnimator = true;
     [SerializeField] private string walkBoolName = "Walk";
@@ -105,15 +100,6 @@ public class TopDownPlayer3D : MonoBehaviour
             rb.constraints = RigidbodyConstraints.FreezeRotation;
             rb.interpolation = RigidbodyInterpolation.Interpolate;
         }
-
-        // Find renderer if not assigned
-        if (playerRenderer == null)
-        {
-            playerRenderer = GetComponentInChildren<Renderer>();
-        }
-
-        // Apply player color
-        ApplyPlayerColor();
     }
 
     private void SetupInputKeys()
@@ -135,16 +121,6 @@ public class TopDownPlayer3D : MonoBehaviour
             leftKey = Key.LeftArrow;
             rightKey = Key.RightArrow;
             sprintKey = Key.RightShift;
-        }
-    }
-
-    private void ApplyPlayerColor()
-    {
-        if (playerRenderer != null)
-        {
-            // Create material instance to avoid modifying shared material
-            Material mat = playerRenderer.material;
-            mat.color = playerNumber == PlayerNumber.Player1 ? player1Color : player2Color;
         }
     }
 
@@ -331,7 +307,6 @@ public class TopDownPlayer3D : MonoBehaviour
     {
         playerNumber = number;
         SetupInputKeys();
-        ApplyPlayerColor();
     }
 
     /// <summary>
