@@ -32,6 +32,14 @@ public class DogController : MonoBehaviour
     [Tooltip("How close to home position before considered 'returned'")]
     public float homeReachDistance = 0.5f;
 
+    [Header("Sound Effects")]
+    [Tooltip("Sound to play when dog starts following player")]
+    public AudioClip barkSound;
+
+    [Tooltip("Volume for bark sound")]
+    [Range(0f, 1f)]
+    public float barkVolume = 1f;
+
     [Header("Visual Debugging")]
     [Tooltip("Show detection range in Scene view")]
     public bool showDebugGizmos = true;
@@ -58,11 +66,25 @@ public class DogController : MonoBehaviour
     private float checkTimer = 0f;
     private float checkInterval = 0.3f; // Check for player every 0.3 seconds
     private bool hasCaughtPlayer = false;
+    private AudioSource audioSource;
 
     void Start()
     {
         // Store the initial position as home
         homePosition = transform.position;
+
+        // Setup audio source
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null && barkSound != null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+
+        if (audioSource != null)
+        {
+            audioSource.playOnAwake = false;
+            audioSource.volume = barkVolume;
+        }
     }
 
     void Update()
@@ -103,6 +125,13 @@ public class DogController : MonoBehaviour
                     targetPlayer = col.transform;
                     currentState = DogState.Following;
                     Debug.Log("Dog detected player and started following!");
+
+                    // Play bark sound
+                    if (audioSource != null && barkSound != null)
+                    {
+                        audioSource.PlayOneShot(barkSound);
+                    }
+
                     break;
                 }
             }

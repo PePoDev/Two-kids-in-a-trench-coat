@@ -32,15 +32,39 @@ public class GuardController : MonoBehaviour
     [Tooltip("How often to check for player (in seconds)")]
     public float detectionInterval = 0.2f;
 
+    [Header("Animation")]
+    [Tooltip("Animator component for controlling guard animations")]
+    public Animator animator;
+
+    [Tooltip("Name of the boolean parameter for controlling walk/idle states")]
+    public string isWalkingParameter = "Walk";
+
+    [Header("Danger Zone Visualization")]
+    [Tooltip("Show danger zone in-game (visible to players)")]
+    public bool showDangerZone = true;
+
+    [Tooltip("Material for the danger zone visualization")]
+    public Material dangerZoneMaterial;
+
+    [Tooltip("Color of danger zone when no detection")]
+    public Color dangerZoneColorNormal = new Color(1f, 0f, 0f, 0.2f);
+
+    [Tooltip("Color of danger zone when kid detected")]
+    public Color dangerZoneColorDetected = new Color(1f, 0f, 0f, 0.5f);
+
+    [Tooltip("Number of segments for vision cone mesh (higher = smoother)")]
+    [Range(8, 64)]
+    public int visionConeSegments = 24;
+
     [Header("Visual Debugging")]
     [Tooltip("Show vision cone in Scene view")]
     public bool showVisionGizmos = true;
 
-    [Tooltip("Color of vision cone when no detection")]
-    public Color visionColorNormal = new Color(1f, 1f, 0f, 0.3f);
+    [Tooltip("Color of vision cone gizmos when no detection")]
+    public Color visionGizmoNormal = new Color(1f, 1f, 0f, 0.3f);
 
-    [Tooltip("Color of vision cone when kid detected")]
-    public Color visionColorDetected = new Color(1f, 0f, 0f, 0.5f);
+    [Tooltip("Color of vision cone gizmos when kid detected")]
+    public Color visionGizmoDetected = new Color(1f, 0f, 0f, 0.5f);
 
     // Private variables
     private int currentWaypointIndex = 0;
@@ -49,12 +73,37 @@ public class GuardController : MonoBehaviour
     private bool isMovingForward = true;
     private float detectionTimer = 0f;
     private bool kidDetected = false;
+    
+    // Danger zone visualization
+    private GameObject dangerZoneObject;
+    private MeshFilter dangerZoneMeshFilter;
+    private MeshRenderer dangerZoneMeshRenderer;
+    private Mesh dangerZoneMesh;
 
     void Start()
     {
         if (patrolWaypoints == null || patrolWaypoints.Length == 0)
         {
             Debug.LogWarning("GuardController: No patrol waypoints assigned!");
+        }
+
+        // Get Animator component if not assigned
+        if (animator == null)
+        {
+            animator = GetComponent<Animator>();
+            if (animator == null)
+            {
+                Debug.LogWarning("GuardController: No Animator component found!");
+            }
+        }
+
+        // Start in idle state
+        SetAnimationState(true);
+
+        // Create danger zone visualization
+        if (showDangerZone)
+        {
+            CreateDangerZoneVisualization();
         }
     }
 
@@ -68,6 +117,12 @@ public class GuardController : MonoBehaviour
 
         // Handle vision detection
         DetectPlayers();
+
+        // Update danger zone visualization
+        if (showDangerZone && dangerZoneMeshFilter != null)
+        {
+            UpdateDangerZone();
+        }
     }
 
     void PatrolPath()
@@ -75,15 +130,24 @@ public class GuardController : MonoBehaviour
         // Handle waiting at waypoint
         if (isWaiting)
         {
+            // Set idle animation
+            SetAnimationState(true);
+
             waitTimer += Time.deltaTime;
             if (waitTimer >= waitTimeAtWaypoint)
             {
                 isWaiting = false;
                 waitTimer = 0f;
                 MoveToNextWaypoint();
+
+                // Set walk animation
+                SetAnimationState(false);
             }
             return;
         }
+
+        // Set walk animation when moving
+        SetAnimationState(false);
 
         // Get current target waypoint
         Transform targetWaypoint = patrolWaypoints[currentWaypointIndex];
@@ -204,6 +268,143 @@ public class GuardController : MonoBehaviour
         }
     }
 
+    void SetAnimationState(bool isIdle)
+    {
+        if (animator == null)
+            return;
+
+        // Set the isWalking parameter (true when walking, false when idle)
+        animator.SetBool(isWalkingParameter, !isIdle);
+    }
+
+    void CreateDangerZoneVisualization()
+    {
+        // Create a child object for the danger zone
+        dangerZoneObject = new GameObject("DangerZone");
+        dangerZoneObject.transform.SetParent(transform);
+        dangerZoneObject.transform.localPosition = Vector3.zero;
+        dangerZoneObject.transform.localRotation = Quaternion.identity;
+
+        // Add mesh components
+        dangerZoneMeshFilter = dangerZoneObject.AddComponent<MeshFilter>();
+        dangerZoneMeshRenderer = dangerZoneObject.AddComponent<MeshRenderer>();
+
+        // Create and assign material
+        if (dangerZoneMaterial != null)
+        {
+            dangerZoneMeshRenderer.material = dangerZoneMaterial;
+        }
+        else
+        {
+            // Create a basic transparent material if none assigned
+            Material mat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+            mat.SetFloat("_Surface", 1); // Transparent
+            mat.SetFloat("_Blend", 0); // Alpha blend
+            mat.renderQueue = 3000;
+            dangerZoneMeshRenderer.material = mat;
+        }
+
+        // Create the vision cone mesh
+        dangerZoneMesh = CreateVisionConeMesh();
+        dangerZoneMeshFilter.mesh = dangerZoneMesh;
+
+        // Set initial color
+        UpdateDangerZoneColor();
+    }
+
+    Mesh CreateVisionConeMesh()
+    {
+        Mesh mesh = new Mesh();
+        mesh.name = "VisionConeMesh";
+
+        int segments = visionConeSegments;
+        float angleStep = visionAngle / segments;
+        float startAngle = -visionAngle / 2f;
+
+        // Calculate vertices with raycasting to detect obstacles
+        Vector3[] vertices = new Vector3[segments + 2];
+        int[] triangles = new int[segments * 3];
+
+        // Origin point at guard position
+        vertices[0] = Vector3.zero + Vector3.up * 0.1f; // Slightly above ground
+
+        // Create arc vertices with raycasting
+        for (int i = 0; i <= segments; i++)
+        {
+            float angle = startAngle + (angleStep * i);
+            float rad = angle * Mathf.Deg2Rad;
+            
+            Vector3 direction = new Vector3(Mathf.Sin(rad), 0, Mathf.Cos(rad));
+            float distance = visionRange;
+
+            // Raycast from guard position in this direction
+            RaycastHit hit;
+            Vector3 worldOrigin = transform.position + Vector3.up * 0.5f;
+            Vector3 worldDirection = transform.TransformDirection(direction);
+
+            if (Physics.Raycast(worldOrigin, worldDirection, out hit, visionRange))
+            {
+                // Hit an obstacle, shorten the distance
+                distance = hit.distance;
+            }
+
+            float x = Mathf.Sin(rad) * distance;
+            float z = Mathf.Cos(rad) * distance;
+            
+            vertices[i + 1] = new Vector3(x, 0.1f, z);
+        }
+
+        // Create triangles
+        for (int i = 0; i < segments; i++)
+        {
+            triangles[i * 3] = 0;
+            triangles[i * 3 + 1] = i + 1;
+            triangles[i * 3 + 2] = i + 2;
+        }
+
+        mesh.vertices = vertices;
+        mesh.triangles = triangles;
+        mesh.RecalculateNormals();
+        mesh.RecalculateBounds();
+
+        return mesh;
+    }
+
+    void UpdateDangerZone()
+    {
+        // Recreate the mesh with current raycast data
+        if (dangerZoneMesh != null)
+        {
+            dangerZoneMesh.Clear();
+            Mesh newMesh = CreateVisionConeMesh();
+            dangerZoneMesh.vertices = newMesh.vertices;
+            dangerZoneMesh.triangles = newMesh.triangles;
+            dangerZoneMesh.RecalculateNormals();
+            dangerZoneMesh.RecalculateBounds();
+        }
+
+        // Update color
+        UpdateDangerZoneColor();
+    }
+
+    void UpdateDangerZoneColor()
+    {
+        if (dangerZoneMeshRenderer == null)
+            return;
+
+        Color targetColor = kidDetected ? dangerZoneColorDetected : dangerZoneColorNormal;
+        dangerZoneMeshRenderer.material.color = targetColor;
+    }
+
+    void OnDestroy()
+    {
+        // Clean up danger zone object
+        if (dangerZoneObject != null)
+        {
+            Destroy(dangerZoneObject);
+        }
+    }
+
     // Draw debug gizmos in the editor
     void OnDrawGizmos()
     {
@@ -243,7 +444,7 @@ public class GuardController : MonoBehaviour
             return;
 
         // Draw vision cone
-        Color visionColor = kidDetected ? visionColorDetected : visionColorNormal;
+        Color visionColor = kidDetected ? visionGizmoDetected : visionGizmoNormal;
         Gizmos.color = visionColor;
 
         Vector3 forward = Application.isPlaying ? transform.forward : transform.forward;
