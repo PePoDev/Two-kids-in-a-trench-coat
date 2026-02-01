@@ -8058,6 +8058,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 95212195555453550, guid: 5b920fc901e2cd945beaebdb578e5b09, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 73456902cd4554424a560d291095fdb7, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8098,9 +8102,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 384
   detectionInterval: 0.2
-  onKidDetected:
-    m_PersistentCalls:
-      m_Calls: []
   showVisionGizmos: 1
   visionColorNormal: {r: 1, g: 1, b: 0, a: 0.3}
   visionColorDetected: {r: 1, g: 0, b: 0, a: 0.5}
@@ -10227,6 +10228,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 95212195555453550, guid: 5b920fc901e2cd945beaebdb578e5b09, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 73456902cd4554424a560d291095fdb7, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10265,11 +10270,8 @@ MonoBehaviour:
   visionAngle: 90
   detectionLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 384
   detectionInterval: 0.2
-  onKidDetected:
-    m_PersistentCalls:
-      m_Calls: []
   showVisionGizmos: 1
   visionColorNormal: {r: 1, g: 1, b: 0, a: 0.3}
   visionColorDetected: {r: 1, g: 0, b: 0, a: 0.5}
@@ -15093,6 +15095,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 95212195555453550, guid: 5b920fc901e2cd945beaebdb578e5b09, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 73456902cd4554424a560d291095fdb7, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -15134,11 +15140,8 @@ MonoBehaviour:
   visionAngle: 90
   detectionLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 384
   detectionInterval: 0.2
-  onKidDetected:
-    m_PersistentCalls:
-      m_Calls: []
   showVisionGizmos: 1
   visionColorNormal: {r: 1, g: 1, b: 0, a: 0.3}
   visionColorDetected: {r: 1, g: 0, b: 0, a: 0.5}
@@ -21877,6 +21880,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 95212195555453550, guid: 5b920fc901e2cd945beaebdb578e5b09, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 73456902cd4554424a560d291095fdb7, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -21918,11 +21925,8 @@ MonoBehaviour:
   visionAngle: 90
   detectionLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 384
   detectionInterval: 0.2
-  onKidDetected:
-    m_PersistentCalls:
-      m_Calls: []
   showVisionGizmos: 1
   visionColorNormal: {r: 1, g: 1, b: 0, a: 0.3}
   visionColorDetected: {r: 1, g: 0, b: 0, a: 0.5}
@@ -22245,6 +22249,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 95212195555453550, guid: 5b920fc901e2cd945beaebdb578e5b09, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 73456902cd4554424a560d291095fdb7, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -22288,11 +22296,8 @@ MonoBehaviour:
   visionAngle: 90
   detectionLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 384
   detectionInterval: 0.2
-  onKidDetected:
-    m_PersistentCalls:
-      m_Calls: []
   showVisionGizmos: 1
   visionColorNormal: {r: 1, g: 1, b: 0, a: 0.3}
   visionColorDetected: {r: 1, g: 0, b: 0, a: 0.5}
@@ -29829,6 +29834,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 95212195555453550, guid: 5b920fc901e2cd945beaebdb578e5b09, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 73456902cd4554424a560d291095fdb7, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -29870,11 +29879,8 @@ MonoBehaviour:
   visionAngle: 90
   detectionLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 384
   detectionInterval: 0.2
-  onKidDetected:
-    m_PersistentCalls:
-      m_Calls: []
   showVisionGizmos: 1
   visionColorNormal: {r: 1, g: 1, b: 0, a: 0.3}
   visionColorDetected: {r: 1, g: 0, b: 0, a: 0.5}
@@ -32505,6 +32511,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 95212195555453550, guid: 5b920fc901e2cd945beaebdb578e5b09, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 73456902cd4554424a560d291095fdb7, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -32550,11 +32560,8 @@ MonoBehaviour:
   visionAngle: 90
   detectionLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 384
   detectionInterval: 0.2
-  onKidDetected:
-    m_PersistentCalls:
-      m_Calls: []
   showVisionGizmos: 1
   visionColorNormal: {r: 1, g: 1, b: 0, a: 0.3}
   visionColorDetected: {r: 1, g: 0, b: 0, a: 0.5}
@@ -32734,6 +32741,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 95212195555453550, guid: 5b920fc901e2cd945beaebdb578e5b09, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 73456902cd4554424a560d291095fdb7, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -32777,11 +32788,8 @@ MonoBehaviour:
   visionAngle: 90
   detectionLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 384
   detectionInterval: 0.2
-  onKidDetected:
-    m_PersistentCalls:
-      m_Calls: []
   showVisionGizmos: 1
   visionColorNormal: {r: 1, g: 1, b: 0, a: 0.3}
   visionColorDetected: {r: 1, g: 0, b: 0, a: 0.5}
@@ -33284,6 +33292,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 95212195555453550, guid: 5b920fc901e2cd945beaebdb578e5b09, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 73456902cd4554424a560d291095fdb7, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -33327,11 +33339,8 @@ MonoBehaviour:
   visionAngle: 90
   detectionLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 384
   detectionInterval: 0.2
-  onKidDetected:
-    m_PersistentCalls:
-      m_Calls: []
   showVisionGizmos: 1
   visionColorNormal: {r: 1, g: 1, b: 0, a: 0.3}
   visionColorDetected: {r: 1, g: 0, b: 0, a: 0.5}
@@ -34120,6 +34129,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 95481129507444498, guid: 7851e97aa32f5474f92b61e3e4988c1a, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 73456902cd4554424a560d291095fdb7, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
