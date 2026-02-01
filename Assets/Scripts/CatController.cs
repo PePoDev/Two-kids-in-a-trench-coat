@@ -1,7 +1,15 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CatController : MonoBehaviour
 {
+    [Header("Events")]
+    [Tooltip("Called each time the cat is pushed/herded by a player")]
+    [SerializeField] private UnityEvent onPushed = new UnityEvent();
+    
+    /// <summary>Public accessor for OnPushed event</summary>
+    public UnityEvent OnPushed => onPushed;
+    
     [Header("Flee Settings")]
     [Tooltip("Distance at which the cat detects and flees from player")]
     public float fleeDetectionRange = 5f;
@@ -156,6 +164,9 @@ public class CatController : MonoBehaviour
         fleeTarget = transform.position + directionAwayFromPlayer * fleeDistance;
         fleeTarget = new Vector3(fleeTarget.x, currentY, fleeTarget.z);
         currentState = CatState.Fleeing;
+        
+        // Invoke pushed event
+        onPushed.Invoke();
         
         Debug.Log("Cat is fleeing from player!");
     }

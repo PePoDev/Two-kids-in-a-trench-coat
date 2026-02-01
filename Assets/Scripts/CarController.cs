@@ -160,6 +160,16 @@ public class CarController : MonoBehaviour
             spawnedCarModel.AddComponent<CarHit>();
         }
         
+        // Add CarHitForwarder to all child colliders
+        Collider[] childColliders = spawnedCarModel.GetComponentsInChildren<Collider>();
+        foreach (Collider col in childColliders)
+        {
+            if (col.GetComponent<CarHitForwarder>() == null)
+            {
+                col.gameObject.AddComponent<CarHitForwarder>();
+            }
+        }
+        
         // Randomize speed when spawning new car model
         if (fixedSpeed <= 0f)
         {

@@ -3,6 +3,10 @@ using UnityEngine;
 /// <summary>
 /// Detects when a car hits the player and triggers game over.
 /// This script is automatically added to cars when spawned.
+///
+/// Note: This script works with colliders on child objects.
+/// Place this script on the parent car object, and it will detect
+/// collisions from any colliders on its children.
 /// </summary>
 public class CarHit : MonoBehaviour
 {
@@ -52,6 +56,28 @@ public class CarHit : MonoBehaviour
             {
                 Debug.LogWarning("GameManager not found! Cannot trigger game over.");
             }
+        }
+    }
+    
+    /// <summary>
+    /// Called by CarHitForwarder when a child collider detects a collision
+    /// </summary>
+    public void OnChildCollision(GameObject hitObject)
+    {
+        if (!useTrigger)
+        {
+            HandleHit(hitObject);
+        }
+    }
+    
+    /// <summary>
+    /// Called by CarHitForwarder when a child collider detects a trigger
+    /// </summary>
+    public void OnChildTrigger(GameObject hitObject)
+    {
+        if (useTrigger)
+        {
+            HandleHit(hitObject);
         }
     }
 }

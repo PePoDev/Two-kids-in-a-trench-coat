@@ -166,8 +166,8 @@ public class GuardController : MonoBehaviour
 
         foreach (Collider collider in colliders)
         {
-            // Check if it's a kid player (has TopDownPlayer component)
-            TopDownPlayer kid = collider.GetComponent<TopDownPlayer>();
+            // Check if it's a kid player (has TopDownPlayer3D component)
+            TopDownPlayer3D kid = collider.GetComponent<TopDownPlayer3D>();
             if (kid != null)
             {
                 // Check if within vision cone
@@ -193,7 +193,7 @@ public class GuardController : MonoBehaviour
         }
     }
 
-    void OnKidDetected(TopDownPlayer kid)
+    void OnKidDetected(TopDownPlayer3D kid)
     {
         Debug.Log($"Guard detected kid player: {kid.gameObject.name}");
 

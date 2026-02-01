@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 /// <summary>
@@ -17,6 +18,19 @@ public class SimpleFPPController : MonoBehaviour
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 4f;
     [SerializeField] private float gravity = -15f;
+    
+    [Header("Walking Events")]
+    [Tooltip("Called when merged character starts walking")]
+    [SerializeField] private UnityEvent onWalkStart = new UnityEvent();
+    
+    [Tooltip("Called when merged character stops walking")]
+    [SerializeField] private UnityEvent onWalkStop = new UnityEvent();
+    
+    /// <summary>Public accessor for OnWalkStart event</summary>
+    public UnityEvent OnWalkStart => onWalkStart;
+    
+    /// <summary>Public accessor for OnWalkStop event</summary>
+    public UnityEvent OnWalkStop => onWalkStop;
     
     [Header("Rotation")]
     [SerializeField] private float rotationSpeed = 120f;
@@ -38,6 +52,7 @@ public class SimpleFPPController : MonoBehaviour
     private float bottomCameraYRotation = 0f; // This also controls player rotation
     private float verticalVelocity = 0f;
     private bool isGrounded = false;
+    private bool isWalking = false; // Track walking state for events
 
     void Awake()
     {
@@ -125,6 +140,19 @@ public class SimpleFPPController : MonoBehaviour
         float moveInput = 0f;
         if (keyboard[Key.UpArrow].isPressed) moveInput = 1f;
         if (keyboard[Key.DownArrow].isPressed) moveInput = -1f;
+        
+        // Check walking state and invoke events
+        bool wasWalking = isWalking;
+        isWalking = Mathf.Abs(moveInput) > 0.01f;
+        
+        if (isWalking && !wasWalking)
+        {
+            onWalkStart.Invoke();
+        }
+        else if (!isWalking && wasWalking)
+        {
+            onWalkStop.Invoke();
+        }
         
         // Calculate movement direction based on bottom camera (player) rotation
         Vector3 moveDirection = transform.forward * moveInput;

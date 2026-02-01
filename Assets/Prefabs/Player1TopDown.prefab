@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 6859367268767283635}
   - component: {fileID: 5934054224120252816}
   - component: {fileID: 3435570921370213460}
+  - component: {fileID: 2227662035269396322}
   - component: {fileID: 7916644625965892341}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player1TopDown
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -29,8 +30,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1713279477006796006}
   m_Father: {fileID: 0}
@@ -71,6 +72,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TopDownPlayer3D
   playerNumber: 0
+  onWalkStart:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onWalkStop:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+        m_MethodName: Stop
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   moveSpeed: 5
   sprintMultiplier: 1.5
   enableSprint: 1
@@ -89,6 +120,30 @@ MonoBehaviour:
   useAnimator: 1
   walkBoolName: Walk
   useItemTriggerName: UseItem
+--- !u!114 &2227662035269396322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 576718563490939860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34a63e2d6bc706a4e9b81ef206f3234a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInteraction
+  detectionRange: 2
+  interactableLayer:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  checkInterval: 0.1
+  showTooltip: 1
+  tooltipText: {fileID: 0}
+  tooltipCanvasGroup: {fileID: 0}
+  tooltipMessage: Press Space to interact
+  OnInteract:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!54 &7916644625965892341
 Rigidbody:
   m_ObjectHideFlags: 0

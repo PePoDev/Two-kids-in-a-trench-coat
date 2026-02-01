@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 /// <summary>
@@ -18,6 +19,19 @@ public class TopDownPlayer3D : MonoBehaviour
 
     [Header("Player Settings")]
     [SerializeField] private PlayerNumber playerNumber = PlayerNumber.Player1;
+    
+    [Header("Walking Events")]
+    [Tooltip("Called when player starts walking")]
+    [SerializeField] private UnityEvent onWalkStart = new UnityEvent();
+    
+    [Tooltip("Called when player stops walking")]
+    [SerializeField] private UnityEvent onWalkStop = new UnityEvent();
+    
+    /// <summary>Public accessor for OnWalkStart event</summary>
+    public UnityEvent OnWalkStart => onWalkStart;
+    
+    /// <summary>Public accessor for OnWalkStop event</summary>
+    public UnityEvent OnWalkStop => onWalkStop;
 
     [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 5f;
@@ -50,6 +64,7 @@ public class TopDownPlayer3D : MonoBehaviour
     private Vector3 velocity;
     private bool isSprinting;
     private bool isGrounded;
+    private bool wasMoving = false; // Track walking state for events
 
     // Components
     private Rigidbody rb;
@@ -185,6 +200,20 @@ public class TopDownPlayer3D : MonoBehaviour
         {
             moveInput.Normalize();
         }
+        
+        // Check walking state and invoke events
+        bool isMovingNow = moveInput.sqrMagnitude > 0.01f;
+        
+        if (isMovingNow && !wasMoving)
+        {
+            onWalkStart.Invoke();
+        }
+        else if (!isMovingNow && wasMoving)
+        {
+            onWalkStop.Invoke();
+        }
+        
+        wasMoving = isMovingNow;
 
         // Sprint
         isSprinting = enableSprint && keyboard[sprintKey].isPressed;

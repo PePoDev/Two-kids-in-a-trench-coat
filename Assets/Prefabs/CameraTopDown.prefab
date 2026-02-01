@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5392842586729717244}
   - component: {fileID: 3960189478409503113}
   - component: {fileID: 5493466412240839326}
+  - component: {fileID: 2139786554943104034}
   m_Layer: 0
   m_Name: CameraTopDown
   m_TagString: Untagged
@@ -137,3 +138,32 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &2139786554943104034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6404108119052900444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d1d167aa9bee4c4c8c7802589e8440b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraTopViewMovement
+  player1: {fileID: 0}
+  player2: {fileID: 0}
+  cameraHeight: 15
+  cameraAngle: 60
+  followSmoothing: 0.1
+  offset: {x: 0, y: 0, z: 0}
+  useDynamicZoom: 1
+  minZoom: 5
+  maxZoom: 25
+  zoomPadding: 3
+  zoomSmoothing: 0.1
+  perspectiveZoomMultiplier: 1.5
+  useBoundaries: 0
+  minX: -50
+  maxX: 50
+  minZ: -50
+  maxZ: 50

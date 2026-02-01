@@ -1,5 +1,12 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
+
+/// <summary>
+/// Custom UnityEvent that passes a Vector3 parameter
+/// </summary>
+[System.Serializable]
+public class Vector3Event : UnityEvent<Vector3> { }
 
 /// <summary>
 /// Manages view switching between top-down and first-person split-screen modes.
@@ -11,6 +18,24 @@ public class ViewSwitchManager : MonoBehaviour
 {
     // ===== SINGLETON =====
     public static ViewSwitchManager Instance { get; private set; }
+    
+    // ===== EVENTS (configurable in Inspector) =====
+    [Header("Events")]
+    [Tooltip("Invoked when players merge into first-person mode. Parameter: merge position")]
+    [SerializeField] private Vector3Event onMerge = new Vector3Event();
+    
+    [Tooltip("Invoked when players separate from first-person mode. Parameter: separation position")]
+    [SerializeField] private Vector3Event onSeparate = new Vector3Event();
+    
+    /// <summary>
+    /// Public accessor for OnMerge event (for code subscription)
+    /// </summary>
+    public Vector3Event OnMerge => onMerge;
+    
+    /// <summary>
+    /// Public accessor for OnSeparate event (for code subscription)
+    /// </summary>
+    public Vector3Event OnSeparate => onSeparate;
     
     [Header("Players")]
     [SerializeField] private GameObject player1;
@@ -155,6 +180,9 @@ public class ViewSwitchManager : MonoBehaviour
         
         isFirstPersonMode = true;
         Debug.Log($"ViewSwitchManager: Switched to Split-Screen FPP at {midpoint}");
+        
+        // Invoke merge event
+        onMerge.Invoke(midpoint);
     }
 
     public void SwitchToTopDown()
@@ -190,6 +218,9 @@ public class ViewSwitchManager : MonoBehaviour
         
         isFirstPersonMode = false;
         Debug.Log($"ViewSwitchManager: Switched to Top-Down at {returnPosition}");
+        
+        // Invoke separate event
+        onSeparate.Invoke(returnPosition);
     }
 
     private void SetTopDownMode()

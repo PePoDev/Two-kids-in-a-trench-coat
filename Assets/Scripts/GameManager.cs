@@ -52,6 +52,7 @@ public class GameManager : MonoBehaviour
     private AudioSource audioSource;
     private bool isLoading = false;
     private bool isGameOver = false;
+    private bool isRetrying = false;
 
     void Awake()
     {
@@ -61,11 +62,11 @@ public class GameManager : MonoBehaviour
             Instance = this;
             // DontDestroyOnLoad(gameObject);
         }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
+        // else
+        // {
+        //     Destroy(gameObject);
+        //     return;
+        // }
 
         // Setup audio source
         audioSource = GetComponent<AudioSource>();
@@ -105,6 +106,9 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        // Reset retrying flag when scene starts
+        isRetrying = false;
+
         // Fade out the loading screen when the scene starts
         StartCoroutine(FadeLoadingScreen(false));
     }
@@ -158,7 +162,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void GameOver()
     {
-        if (isGameOver)
+        if (isGameOver || isRetrying)
             return;
 
         StartCoroutine(ShowGameOver());
@@ -173,17 +177,14 @@ public class GameManager : MonoBehaviour
             return;
 
         isGameOver = false;
+        isRetrying = true;
 
         // Unpause the game
         Time.timeScale = 1f;
 
-        // Hide game over screen
-        if (gameOverCanvas != null)
-        {
-            gameOverCanvas.gameObject.SetActive(false);
-        }
-
-        ReloadCurrentScene();
+        // Reload scene immediately without transition
+        string currentScene = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(currentScene);
     }
 
     /// <summary>
@@ -208,6 +209,8 @@ public class GameManager : MonoBehaviour
             audioSource.PlayOneShot(gameOverSound);
         }
 
+        ViewSwitchManager.Instance.SwitchToTopDown();
+
         // Pause the game
         Time.timeScale = 0f;
 
@@ -219,7 +222,7 @@ public class GameManager : MonoBehaviour
             // Update game over text if available
             if (gameOverText != null)
             {
-                gameOverText.text = $"Game Over!\nPress {retryKey} to Retry";
+                gameOverText.text = $"Game Over!\n\n\n\n\nPress {retryKey} to Retry";
             }
 
             float elapsed = 0f;
@@ -281,6 +284,7 @@ public class GameManager : MonoBehaviour
         yield return StartCoroutine(FadeLoadingScreen(false));
 
         isLoading = false;
+        isRetrying = false;
     }
 
     private IEnumerator LoadSceneWithTransition(int sceneIndex)
@@ -330,6 +334,7 @@ public class GameManager : MonoBehaviour
         yield return StartCoroutine(FadeLoadingScreen(false));
 
         isLoading = false;
+        isRetrying = false;
     }
 
     private IEnumerator FadeLoadingScreen(bool fadeIn)

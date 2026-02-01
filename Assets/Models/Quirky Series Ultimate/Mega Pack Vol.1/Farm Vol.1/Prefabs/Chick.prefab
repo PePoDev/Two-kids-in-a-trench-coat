@@ -324,26 +324,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04f69538f04e548d3949fa2f0b6b7e2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CatController
-  fleeDetectionRange: 5
-  fleeSpeed: 6
+  onPushed:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  fleeDetectionRange: 2
+  fleeSpeed: 5
   playerLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   playerTag: Player
-  fleeDistance: 3
-  fleeCooldown: 1.5
+  fleeDistance: 2
+  fleeCooldown: 0.5
   avoidObstacles: 1
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 0
-  boxTag: CaptureBox
-  onCatCaught:
-    m_PersistentCalls:
-      m_Calls: []
+    m_Bits: 64
   showDebugGizmos: 1
   gizmoColorDetection: {r: 1, g: 0.5, b: 0, a: 0.3}
   gizmoColorFleeing: {r: 1, g: 0, b: 0, a: 0.5}
-  gizmoColorCaught: {r: 0, g: 1, b: 0, a: 0.7}
 --- !u!136 &5094148846012020310
 CapsuleCollider:
   m_ObjectHideFlags: 0
