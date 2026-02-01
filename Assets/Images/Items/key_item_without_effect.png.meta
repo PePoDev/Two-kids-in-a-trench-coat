@@ -150,10 +150,10 @@ TextureImporter:
       name: key_item_without_effect_1
       rect:
         serializedVersion: 2
-        x: 82
-        y: 622
-        width: 6
-        height: 6
+        x: 83
+        y: 623
+        width: 4
+        height: 4
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -169,35 +169,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: key_item_without_effect_2
-      rect:
-        serializedVersion: 2
-        x: 828
-        y: 0
-        width: 696
-        height: 1024
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 03654c1a6452436a0800000000000000
-      internalID: -6470505779332622800
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: key_item_without_effect_3
       rect:
         serializedVersion: 2
-        x: 331
-        y: 317
-        width: 186
-        height: 92
+        x: 335
+        y: 318
+        width: 181
+        height: 90
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -213,23 +191,67 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: key_item_without_effect_4
+      name: key_item_without_effect_5
       rect:
         serializedVersion: 2
-        x: 1031
-        y: 315
-        width: 234
-        height: 95
+        x: 963
+        y: 424
+        width: 439
+        height: 305
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: d3ff16afa1c7cae80800000000000000
-      internalID: -8166015569017831619
+      spriteID: d8b5cf4b9a6fa470fad196ad9bb2209c
+      internalID: -993001766
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: key_item_without_effect_7
+      rect:
+        serializedVersion: 2
+        x: 840
+        y: 0
+        width: 694
+        height: 1022
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aadb9ec076a0741988bfcf37193b19cd
+      internalID: -2002835868
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: key_item_without_effect_8
+      rect:
+        serializedVersion: 2
+        x: 1032
+        y: 316
+        width: 232
+        height: 93
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 50610325cf93d4e2f89af6c809a31233
+      internalID: -1353215090
       vertices: []
       indices: 
       edges: []
@@ -246,13 +268,19 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":1,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       key_item_without_effect_0: -4314577843779140746
       key_item_without_effect_1: -3415723154510866785
       key_item_without_effect_2: -6470505779332622800
       key_item_without_effect_3: -6128723033533093619
       key_item_without_effect_4: -8166015569017831619
+      key_item_without_effect_5: -993001766
+      key_item_without_effect_6: 1666901088
+      key_item_without_effect_7: -2002835868
+      key_item_without_effect_8: -1353215090
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

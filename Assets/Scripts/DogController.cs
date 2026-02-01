@@ -18,6 +18,9 @@ public class DogController : MonoBehaviour
 
     [Tooltip("How close the dog gets to the player before stopping")]
     public float followStopDistance = 2f;
+    
+    [Tooltip("Distance at which dog catches player and triggers game over")]
+    public float catchDistance = 1f;
 
     [Tooltip("Time to wait at player position before returning home")]
     public float waitDuration = 3f;
@@ -54,6 +57,7 @@ public class DogController : MonoBehaviour
     private float waitTimer = 0f;
     private float checkTimer = 0f;
     private float checkInterval = 0.3f; // Check for player every 0.3 seconds
+    private bool hasCaughtPlayer = false;
 
     void Start()
     {
@@ -115,6 +119,14 @@ public class DogController : MonoBehaviour
         }
 
         float distanceToPlayer = Vector3.Distance(transform.position, targetPlayer.position);
+
+        // Check if dog caught the player
+        if (distanceToPlayer <= catchDistance && !hasCaughtPlayer)
+        {
+            hasCaughtPlayer = true;
+            CatchPlayer();
+            return;
+        }
 
         // Check if player moved out of detection range
         if (distanceToPlayer > detectionRange * 1.5f)
@@ -204,6 +216,21 @@ public class DogController : MonoBehaviour
         }
     }
 
+    void CatchPlayer()
+    {
+        Debug.Log("Dog caught the player! Game Over!");
+        
+        // Trigger game over
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.GameOver();
+        }
+        else
+        {
+            Debug.LogWarning("GameManager not found! Cannot trigger game over.");
+        }
+    }
+
     void OnDrawGizmos()
     {
         if (!showDebugGizmos)
@@ -233,6 +260,10 @@ public class DogController : MonoBehaviour
         {
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(position, followStopDistance);
+            
+            // Draw catch distance
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(position, catchDistance);
         }
 
         // Draw state indicator
