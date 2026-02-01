@@ -126,10 +126,12 @@ public class DogController : MonoBehaviour
                     currentState = DogState.Following;
                     Debug.Log("Dog detected player and started following!");
 
-                    // Play bark sound
-                    if (audioSource != null && barkSound != null)
+                    // Start looping bark sound
+                    if (audioSource != null && barkSound != null && !audioSource.isPlaying)
                     {
-                        audioSource.PlayOneShot(barkSound);
+                        audioSource.clip = barkSound;
+                        audioSource.loop = true;
+                        audioSource.Play();
                     }
 
                     break;
@@ -143,6 +145,7 @@ public class DogController : MonoBehaviour
         if (targetPlayer == null)
         {
             // Player disappeared, return home
+            StopBarkSound();
             currentState = DogState.Returning;
             return;
         }
@@ -161,6 +164,7 @@ public class DogController : MonoBehaviour
         if (distanceToPlayer > detectionRange * 1.5f)
         {
             // Player too far, start waiting then return
+            StopBarkSound();
             targetPlayer = null;
             currentState = DogState.Waiting;
             waitTimer = 0f;
@@ -183,6 +187,7 @@ public class DogController : MonoBehaviour
         else
         {
             // Close enough to player, start waiting
+            StopBarkSound();
             currentState = DogState.Waiting;
             waitTimer = 0f;
         }
@@ -257,6 +262,14 @@ public class DogController : MonoBehaviour
         else
         {
             Debug.LogWarning("GameManager not found! Cannot trigger game over.");
+        }
+    }
+
+    void StopBarkSound()
+    {
+        if (audioSource != null && audioSource.isPlaying)
+        {
+            audioSource.Stop();
         }
     }
 
