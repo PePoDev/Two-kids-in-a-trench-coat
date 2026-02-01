@@ -8096,7 +8096,7 @@ MonoBehaviour:
   visionAngle: 90
   detectionLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 384
   detectionInterval: 0.2
   onKidDetected:
     m_PersistentCalls:

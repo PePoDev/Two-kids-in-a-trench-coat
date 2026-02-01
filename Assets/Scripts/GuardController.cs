@@ -32,10 +32,6 @@ public class GuardController : MonoBehaviour
     [Tooltip("How often to check for player (in seconds)")]
     public float detectionInterval = 0.2f;
 
-    [Header("Detection Response")]
-    [Tooltip("What happens when kid is detected")]
-    public UnityEngine.Events.UnityEvent onKidDetected;
-
     [Header("Visual Debugging")]
     [Tooltip("Show vision cone in Scene view")]
     public bool showVisionGizmos = true;
@@ -197,10 +193,14 @@ public class GuardController : MonoBehaviour
     {
         Debug.Log($"Guard detected kid player: {kid.gameObject.name}");
 
-        // Invoke the event
-        if (onKidDetected != null)
+        // Trigger game over
+        if (GameManager.Instance != null)
         {
-            onKidDetected.Invoke();
+            GameManager.Instance.GameOver();
+        }
+        else
+        {
+            Debug.LogWarning("GameManager not found! Cannot trigger game over.");
         }
     }
 
