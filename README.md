@@ -127,7 +127,7 @@ Assets/
 └── Settings/           # Unity project settings
 ```
 
-## Core Scripts
+## Core Scripts (AI)
 
 ### Player Controllers
 - **TopDownPlayer3D.cs**: Handles top-down player movement with WASD/Arrow keys
@@ -186,9 +186,10 @@ Created for Global Game Jam 2026
 ## Credits
 
 ### Assets
-- Vehicle models from various asset packs
-- City environment elements
-- Character models and animations
+- Vehicle models from various asset packs (Unity Asset)
+- City environment elements (Unity Asset)
+- Character models and animations (Unity Asset)
+- Cutscenes/Background (AI)
 
 ### Audio
 - Adventure music
